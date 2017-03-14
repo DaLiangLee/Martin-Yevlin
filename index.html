@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"  content=" width=device-width, initial-scale=1.0">
+			<link rel="shortcut icon" href="/BaiDu/images/favicon.ico" type="image/x-icon" />
+			<link rel="icon" sizes="any" mask href="/BaiDu/images/baidu.svg">
+			<link rel="stylesheet" type="text/css" href="../../lay/layer-v3.0.1/layer/mobile/need/layer.css" />
+			<link rel="stylesheet" href="../lib/css/bootstrap.css" />
+			<link rel="stylesheet" href="../lib/css/index.css" />
+			<script src="../lib/js/jquery-2.2.2.min.js"></script>
+			<script src="../../lay/layer-v3.0.1/layer/layer.js"></script>
+			<script src="../lib/js/bootstrap.js"></script>
+			<script src="../lib/js/vue.js"></script>
+			<script src="../lib/js/vue-resource.js"></script>
+			<title>百度一下，你就知道</title>
+			<style type="text/css">
+				[v-cloak] {
+					display: none;
+				}
+				.gray{
+					background-color: darkgray;
+				}
+				.ulmain{
+					/*border: 1px solid red;*/
+					display: block;
+					margin: 0 auto;
+					margin-left: 318px;
+					margin-top: 32px;
+				}
+				.ulmain li{
+					text-align: left;
+				}
+			</style>
+	</head>
+
+	<body>
+		<div id="wrapper">
+			<nav id="header">
+				<div id="u" class="navbar-brand navbar-right">
+					<a href="" class="ua">糯米</a>
+					<a href="" class="ua">新闻</a>
+					<a href="" class="ua">hao123</a>
+					<a href="" class="ua">地图</a>
+					<a href="" class="ua">视频</a>
+					<a href="" class="ua">贴吧</a>
+					<a href="javascript:;" class="mr Login">登录</a>
+					<a href="" class="mr">设置</a>
+					<a href="http://www.baidu.com/more/" name="tj_briicon" class="bri">更多产品</a>
+				</div>
+			</nav>
+			<div id="contain" class="text-center">
+				<form action="/s" id="form" name="f" class="fm" style="display: none;">
+					<div class="soutu-layer">
+						<div class="soutu-url">
+							<span class="soutu-url-wrap">
+								<input type="file" id="sou-url-kw" class="soutu-url-kw" / maxlength="255" autocomplete="off" placeholder="在此处粘贴图片网址">
+							</span>
+							<span class="soutu-url-btn">
+								<i class="soutu-url-btn-icon"></i>
+							</span>
+							<span class="soutu-url-error" style="display: none;">
+								爱能够输出正确的图片网址
+							</span>
+						</div>
+						<div class="soutu-state-normal" style="display: block;">
+							<div class="soutu-drop">
+								<span class="soutu-drop-tip">
+									拖拽图片到这里
+								</span>
+								<i class="soutu-drop-icon"></i>
+							</div>
+							<div class="upload-wrap">
+								<input type="file" class="upload-pic" name="" id="" value="上传图片" />
+								<i class="upload-icon"></i>
+								<span class="upload-text">本地上传图片</span>
+							</div>
+						</div>
+						<a href="javascript:void(0)" class="soutu-close"></a>
+					</div>
+				</form>
+				<div class="Baidu_img">
+					<img src="../images/bd_logo1.png" alt="" width="270" height="129" class="" />
+				</div>
+				<span class="search_wp">
+<input type="text" id="kw" class="s_ipt" autofocus="autofocus" v-model="t1" @keyup="get($event)" @keydown.down="changeDown()" @keydown.up.prevent="changeUp()" name="wd" value="" maxlength="255" autocomplete="off"/>
+						<span class="soutu-btn"></span>
+				</span>
+				<span class="search_wp">
+						<input type="submit" class="btn_search" value="百度一下"/>
+					</span>
+				<div v-cloak>
+					<ul class="list-group col-lg-5 ulmain">
+						<li class="list-group-item" v-for="value in myData" :class="{gray:$index==now}">{{value}}</li>
+					</ul>
+				</div>
+				<!--<p class="text-center" v-show="myData.length==0">暂无数据</p>-->
+				<div class="qrcodeCom">
+					<div class="qrcode">
+						<div class="qrcodeImg">
+
+						</div>
+						<div class="qecodeText">
+							<p><b>手机百度</b></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="ftCon">
+				<div class="ftCon-Wrapper text-center">
+					<div id="ftConw">
+						<p id="Ih">
+							<a href="">把百度设为主页</a>
+							<a href="">关于百度</a>
+							<a href="">About  Baidu</a>
+							<a href="">百度推广</a>
+						</p>
+						<p id="cp">
+							@2017 Badidu
+							<a href="">使用百度前必读</a>
+							<a href="">意见反馈</a>京ICP证030173号
+							<i class="c-icon-icrlogo"></i>
+							<a href="" id="ml">京公网安备11000002000001号</a>
+							<i class="c-icon-jgwablogo"></i>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--弹出层-->
+		<script type="text/javascript">
+			$(function() {
+				$('.Login').click(function() {
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn: false,
+						area: ['391px', '516px'],
+						fixed: false, //不固定
+						maxmin: false,
+						//move:"#Login",
+						content: ['index2.html', 'no']
+					})
+				})
+			})
+			window.onload = function() {
+				new Vue({
+					el: '#contain',
+					data: {
+						myData: [],
+						t1: '',
+						now: -1
+					},
+					methods: {
+						get: function(ev) {
+							if(ev.keyCode == 38 || ev.keyCode == 40) return;
+							if(ev.keyCode == 13) {
+								window.open('https://www.baidu.com/s?wd=' + this.t1);
+								this.t1 = '';
+							}
+							this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su', {
+									wd: this.t1
+								}, {
+									jsonp: 'cb'
+								}).then(function(res) {
+									this.myData = res.data.s;
+								}),
+								function() {
+
+								};
+						},
+						changeDown: function() {
+							this.now++;
+							if(this.now == this.myData.length)
+								this.now = -1;
+							this.t1 = this.myData[this.now]
+						},
+						changeUp: function() {
+							this.now--;
+							if(this.now == -2)
+								this.now = this.myData.length - 1;
+							this.t1 = this.myData[this.now]
+						}
+					}
+				})
+			}
+		</script>
+	</body>
+
+</html>
